@@ -1,37 +1,15 @@
-import { useEffect, useState } from "react";
-import { GenreResponseProps, MovieProps } from "../AppTypes";
-import { api } from "../services/api";
 import { MovieCard } from "./MovieCard";
 import "../styles/content.scss";
-interface ContentProps {
-  selectedGenreId: number;
-}
+import { useMovies } from "../MovieContext";
 
-export function Content(prop: ContentProps) {
-  const [movies, setMovies] = useState<MovieProps[]>([]);
-  const selectedGenreId = prop.selectedGenreId;
-  const [selectedGenre, setSelectedGenre] = useState<GenreResponseProps>(
-    {} as GenreResponseProps
-  );
+export function Content() {
+  const { selectedGender, movies } = useMovies();
 
-  useEffect(() => {
-    api
-      .get<MovieProps[]>(`movies/?Genre_id=${selectedGenreId}`)
-      .then((response) => {
-        setMovies(response.data);
-      });
-
-    api
-      .get<GenreResponseProps>(`genres/${selectedGenreId}`)
-      .then((response) => {
-        setSelectedGenre(response.data);
-      });
-  }, [selectedGenreId]);
   return (
     <div className="container">
       <header>
         <span className="category">
-          Categoria:<span> {selectedGenre.title}</span>
+          Categoria:<span> {selectedGender.title}</span>
         </span>
       </header>
 
